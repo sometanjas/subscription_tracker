@@ -16,11 +16,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import com.hwr.subscriptiontracker.navigation.AppNavigation
 import com.hwr.subscriptiontracker.ui.theme.SubscriptionTrackerTheme
+
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.BarChart
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,58 +37,69 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@PreviewScreenSizes
 @Composable
 fun SubscriptionTrackerApp() {
-    var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
+    var showStartScreen by rememberSaveable { mutableStateOf(true) }
 
-    NavigationSuiteScaffold(
-        navigationSuiteItems = {
-            AppDestinations.entries.forEach {
+    if (showStartScreen) {
+        AppNavigation()
+    } else {
+        var currentDestination by rememberSaveable { mutableStateOf("Home") }
+
+        NavigationSuiteScaffold(
+            navigationSuiteItems = {
                 item(
                     icon = {
                         Icon(
-                            painterResource(it.icon),
-                            contentDescription = it.label
+                            Icons.Default.Home,
+                            contentDescription = "Home"
                         )
                     },
-                    label = { Text(it.label) },
-                    selected = it == currentDestination,
-                    onClick = { currentDestination = it }
+                    label = { Text("Home") },
+                    selected = currentDestination == "Home",
+                    onClick = { currentDestination = "Home" }
+                )
+                item(
+                    icon = {
+                        Icon(
+                            Icons.Default.BarChart,
+                            contentDescription = "Stats"
+                        )
+                    },
+                    label = { Text("Stats") },
+                    selected = currentDestination == "Stats",
+                    onClick = { currentDestination = "Stats" }
+                )
+                item(
+                    icon = {
+                        Icon(
+                            Icons.Default.Settings,
+                            contentDescription = "Settings"
+                        )
+                    },
+                    label = { Text("Settings") },
+                    selected = currentDestination == "Settings",
+                    onClick = { currentDestination = "Settings" }
+                )
+                item(
+                    icon = {
+                        Icon(
+                            Icons.Default.Add,
+                            contentDescription = "Add Service"
+                        )
+                    },
+                    label = { Text("Add Service") },
+                    selected = currentDestination == "Add Service",
+                    onClick = { currentDestination = "Add Service" }
+                )
+            }
+        ) {
+            Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Text(
+                    text = "Welcome!",
+                    modifier = Modifier.padding(innerPadding)
                 )
             }
         }
-    ) {
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            Greeting(
-                name = "Android",
-                modifier = Modifier.padding(innerPadding)
-            )
-        }
-    }
-}
-
-enum class AppDestinations(
-    val label: String,
-    val icon: Int,
-) {
-    HOME("Home", R.drawable.ic_home),
-    FAVORITES("Favorites", R.drawable.ic_favorite),
-    PROFILE("Profile", R.drawable.ic_account_box),
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SubscriptionTrackerTheme {
-        Greeting("Android")
     }
 }
