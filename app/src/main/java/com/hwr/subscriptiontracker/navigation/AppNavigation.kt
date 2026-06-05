@@ -10,7 +10,10 @@ import com.hwr.subscriptiontracker.screen.RegisterScreen
 import com.hwr.subscriptiontracker.screen.StartScreen
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(
+    onLoginSuccess: () -> Unit,
+    onRegisterSuccess: () -> Unit
+) {
     val navController = rememberNavController()
 
     NavHost(
@@ -34,6 +37,10 @@ fun AppNavigation() {
             LoginScreen(
                 onNavigateBack = {
                     navController.popBackStack()
+                },
+                onLoginSuccess = {
+                    navController.navigate("main")
+                    onLoginSuccess()
                 }
             )
         }
@@ -41,6 +48,10 @@ fun AppNavigation() {
             RegisterScreen(
                 onNavigateBack = {
                     navController.popBackStack()
+                },
+                onRegisterSuccess = {
+                    navController.navigate("main")
+                    onRegisterSuccess()
                 }
             )
         }

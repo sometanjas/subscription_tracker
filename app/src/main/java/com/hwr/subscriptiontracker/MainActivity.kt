@@ -4,8 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -13,6 +15,7 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -24,6 +27,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
+
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,10 +44,16 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun SubscriptionTrackerApp() {
-    var showStartScreen by rememberSaveable { mutableStateOf(true) }
+    val auth = remember { FirebaseAuth.getInstance() }
+    var showStartScreen by rememberSaveable {
+        mutableStateOf(auth.currentUser == null)
+    }
 
     if (showStartScreen) {
-        AppNavigation()
+        AppNavigation(
+            onLoginSuccess = { showStartScreen = false },
+            onRegisterSuccess = { showStartScreen = false }
+        )
     } else {
         var currentDestination by rememberSaveable { mutableStateOf("Home") }
 
@@ -95,10 +106,15 @@ fun SubscriptionTrackerApp() {
             }
         ) {
             Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                Text(
-                    text = "Welcome!",
-                    modifier = Modifier.padding(innerPadding)
-                )
+                Column(modifier = Modifier.padding(innerPadding)) {
+                    Text("Welcome!")
+                    Button(onClick = {
+                        auth.signOut()
+                        showStartScreen = true
+                    }) {
+                        Text("LOGOUT")
+                    }
+                }
             }
         }
     }
