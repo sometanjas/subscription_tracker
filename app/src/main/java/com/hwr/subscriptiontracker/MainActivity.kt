@@ -7,6 +7,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.BarChart
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -19,16 +24,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.hwr.subscriptiontracker.navigation.AppNavigation
-import com.hwr.subscriptiontracker.ui.theme.SubscriptionTrackerTheme
-
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
-
 import com.google.firebase.auth.FirebaseAuth
+import com.hwr.subscriptiontracker.navigation.AppNavigation
+import com.hwr.subscriptiontracker.screen.AddSubscriptionScreen
+import com.hwr.subscriptiontracker.ui.theme.SubscriptionTrackerTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,12 +106,18 @@ fun SubscriptionTrackerApp() {
         ) {
             Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                 Column(modifier = Modifier.padding(innerPadding)) {
-                    Text("Welcome!")
-                    Button(onClick = {
-                        auth.signOut()
-                        showStartScreen = true
-                    }) {
-                        Text("LOGOUT")
+                    if (currentDestination == "Add Service") {
+                        AddSubscriptionScreen(
+                            onSaved = { currentDestination = "Home" }
+                        )
+                    } else {
+                        Text("Welcome!")
+                        Button(onClick = {
+                            auth.signOut()
+                            showStartScreen = true
+                        }) {
+                            Text("LOGOUT")
+                        }
                     }
                 }
             }

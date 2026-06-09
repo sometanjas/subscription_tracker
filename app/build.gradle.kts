@@ -54,6 +54,8 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(platform("com.google.firebase:firebase-bom:34.14.0"))
     implementation("com.google.firebase:firebase-auth")
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation("com.google.firebase:firebase-firestore")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

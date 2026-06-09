@@ -17,8 +17,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun StartScreen(
     onNavigateToLogin: () -> Unit,
-    onNavigateToRegister: () -> Unit,
-    onNavigateToMain: () -> Unit
+    onNavigateToRegister: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -27,6 +26,11 @@ fun StartScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Text(
+            text = "Subscription Tracker",
+            modifier = Modifier.padding(bottom = 32.dp)
+        )
+
         Button(
             onClick = onNavigateToLogin,
             modifier = Modifier.fillMaxWidth()
@@ -41,15 +45,6 @@ fun StartScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("REGISTER")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = onNavigateToMain,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("MAIN SCREEN (DEMO)")
         }
     }
 }
